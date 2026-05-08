@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE } from "../consts";
+---
+
+<BaseLayout title="About" description={`A little about ${SITE.author}.`}>
+  <h1>About</h1>
+  <p>
+    Hi — I'm {SITE.author}. This is where I write down what I'm thinking about. Replace
+    this page with your own bio in <code>src/pages/about.astro</code>, or edit it from
+    <a href="/admin/">the admin panel</a>.
+  </p>
+  <p>
+    You can reach me at <a href={`mailto:${SITE.authorEmail}`}>{SITE.authorEmail}</a>.
+  </p>
+</BaseLayout>

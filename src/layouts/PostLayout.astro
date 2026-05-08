@@ -1,0 +1,55 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import ShareButtons from "../components/ShareButtons.astro";
+import Newsletter from "../components/Newsletter.astro";
+import Comments from "../components/Comments.astro";
+import BackToTop from "../components/BackToTop.astro";
+import { FEATURES } from "../consts";
+import { estimateReadingTime } from "../utils/readingTime";
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  heroImage?: { src: string; width: number; height: number };
+  tags: string[];
+  slug: string;
+  rawContent: string;
+}
+const { title, description, pubDate, updatedDate, heroImage, tags, slug, rawContent } = Astro.props;
+const readingMinutes = FEATURES.readingTime ? estimateReadingTime(rawContent) : 0;
+---
+
+<BaseLayout {title} {description} article={true} publishedTime={pubDate} image={heroImage?.src}>
+  <article>
+    <h1>{title}</h1>
+    <p class="post-meta">
+      <FormattedDate date={pubDate} />
+      {updatedDate && (
+        <>
+          <span class="sep">·</span>
+          <span>Updated <FormattedDate date={updatedDate} /></span>
+        </>
+      )}
+      {FEATURES.readingTime && (
+        <>
+          <span class="sep">·</span>
+          <span>{readingMinutes} min read</span>
+        </>
+      )}
+    </p>
+    {heroImage && <img src={heroImage.src} width={heroImage.width} height={heroImage.height} alt="" />}
+    <slot />
+    {FEATURES.tags && tags.length > 0 && (
+      <p style="margin-top:2.5rem">
+        {tags.map((tag) => <span class="tag">#{tag}</span>)}
+      </p>
+    )}
+    {FEATURES.shareButtons && <ShareButtons {title} {slug} />}
+    {FEATURES.newsletter && <Newsletter />}
+    {FEATURES.comments && <Comments />}
+  </article>
+  {FEATURES.backToTop && <BackToTop />}
+</BaseLayout>

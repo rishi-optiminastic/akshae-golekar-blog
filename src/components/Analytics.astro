@@ -1,0 +1,27 @@
+---
+import { ANALYTICS } from "../consts";
+const { provider, identifier } = ANALYTICS;
+---
+
+{
+  provider === "plausible" && identifier && (
+    <script
+      is:inline
+      defer
+      data-domain={identifier}
+      src="https://plausible.io/js/script.js"
+    />
+  )
+}
+
+{
+  provider === "umami" && identifier && (
+    <script is:inline defer src={identifier} />
+  )
+}
+
+{
+  provider === "vercel" && (
+    <script is:inline defer src="/_vercel/insights/script.js" />
+  )
+}

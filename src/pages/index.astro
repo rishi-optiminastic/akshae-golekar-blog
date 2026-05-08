@@ -1,0 +1,43 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import Newsletter from "../components/Newsletter.astro";
+import { SITE, FEATURES } from "../consts";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 5);
+---
+
+<BaseLayout title={SITE.title} description={SITE.description}>
+  <section>
+    <h1>Hi, I'm {SITE.author.split(" ")[0]} 👋</h1>
+    <p>
+      I write about ideas, work, and whatever I'm thinking about. This is my little corner
+      of the internet. Subscribe via <a href="/rss.xml">RSS</a> if you'd like to follow along.
+    </p>
+  </section>
+
+  <section style="margin-top:3rem">
+    <h2 style="margin-top:0">Latest writing</h2>
+    {posts.length === 0 ? (
+      <p style="color:var(--text-muted)">No posts yet — check back soon.</p>
+    ) : (
+      <ul class="post-list">
+        {posts.map((post) => (
+          <li>
+            <a href={`/blog/${post.slug}/`}>
+              <h2>{post.data.title}</h2>
+              <p class="meta"><FormattedDate date={post.data.pubDate} /></p>
+              <p class="desc">{post.data.description}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+    <p style="margin-top:1.5rem"><a href="/blog/">All posts →</a></p>
+  </section>
+
+  {FEATURES.newsletter && <Newsletter />}
+</BaseLayout>

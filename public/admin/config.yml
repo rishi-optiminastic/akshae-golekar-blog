@@ -1,0 +1,56 @@
+# Decap CMS configuration
+# Docs: https://decapcms.org/docs/
+
+backend:
+  name: git-gateway
+  branch: main
+  commit_messages:
+    create: "content: create {{collection}} '{{slug}}'"
+    update: "content: update {{collection}} '{{slug}}'"
+    delete: "content: delete {{collection}} '{{slug}}'"
+    uploadMedia: "content: upload '{{path}}'"
+    deleteMedia: "content: delete '{{path}}'"
+
+# Use Netlify Identity widget for auth (free). Alternative: switch to GitHub OAuth.
+# When deploying on Vercel, use https://github.com/vencax/netlify-cms-github-oauth-provider
+# or switch backend.name to 'github' with a server-side OAuth proxy.
+
+publish_mode: editorial_workflow
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+site_url: https://akshaegolekar.com
+display_url: https://akshaegolekar.com
+logo_url: https://akshaegolekar.com/favicon.svg
+
+collections:
+  - name: "blog"
+    label: "Blog Posts"
+    label_singular: "Post"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    summary: "{{title}} — {{pubDate}}"
+    sortable_fields: ["pubDate", "title"]
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "text", hint: "1-2 sentences. Used for SEO + previews." }
+      - { label: "Publish Date", name: "pubDate", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+      - { label: "Updated Date", name: "updatedDate", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD", required: false }
+      - { label: "Hero Image", name: "heroImage", widget: "image", required: false }
+      - { label: "Tags", name: "tags", widget: "list", required: false, default: [] }
+      - { label: "Draft", name: "draft", widget: "boolean", default: false }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "pages"
+    label: "Pages"
+    files:
+      - file: "src/pages/about.astro"
+        label: "About"
+        name: "about"
+        editor:
+          preview: false
+        fields:
+          - { label: "Body (Astro)", name: "body", widget: "text" }

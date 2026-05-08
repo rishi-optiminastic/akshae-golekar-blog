@@ -1,0 +1,23 @@
+---
+import { NEWSLETTER } from "../consts";
+const { provider, identifier, title, description } = NEWSLETTER;
+
+const action =
+  provider === "buttondown"
+    ? `https://buttondown.email/api/emails/embed-subscribe/${identifier}`
+    : `https://${identifier}/api/v1/free`;
+---
+
+<aside class="newsletter">
+  <h3>{title}</h3>
+  <p>{description}</p>
+  <form
+    action={action}
+    method="post"
+    target="popupwindow"
+    onsubmit={`window.open('${action}','popupwindow')`}
+  >
+    <input type="email" name="email" placeholder="you@example.com" required />
+    <button type="submit">Subscribe</button>
+  </form>
+</aside>

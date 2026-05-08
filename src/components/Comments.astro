@@ -1,0 +1,24 @@
+---
+import { GISCUS, THEME } from "../consts";
+const giscusTheme = THEME.defaultMode === "dark" ? "dark" : "preferred_color_scheme";
+---
+
+<section style="margin-top:3rem">
+  <script
+    is:inline
+    src="https://giscus.app/client.js"
+    data-repo={GISCUS.repo}
+    data-repo-id={GISCUS.repoId}
+    data-category={GISCUS.category}
+    data-category-id={GISCUS.categoryId}
+    data-mapping={GISCUS.mapping}
+    data-strict="0"
+    data-reactions-enabled={GISCUS.reactionsEnabled}
+    data-emit-metadata={GISCUS.emitMetadata}
+    data-input-position="bottom"
+    data-theme={giscusTheme}
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async></script>
+</section>

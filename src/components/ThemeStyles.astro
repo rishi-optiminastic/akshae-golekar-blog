@@ -1,0 +1,74 @@
+---
+import { THEME, FONTS } from "../consts";
+
+const { light, dark, defaultMode, maxWidth, bodyFontSize, radius, linkStyle } = THEME;
+
+const lightVars = `
+  --bg: ${light.bg};
+  --bg-soft: ${light.bgSoft};
+  --text: ${light.text};
+  --text-muted: ${light.textMuted};
+  --accent: ${light.accent};
+  --accent-soft: ${light.accentSoft};
+  --border: ${light.border};
+  --selection-bg: ${light.selectionBg};
+  --selection-text: ${light.selectionText};
+  --code-bg: ${light.codeBg};
+`.trim();
+
+const darkVars = `
+  --bg: ${dark.bg};
+  --bg-soft: ${dark.bgSoft};
+  --text: ${dark.text};
+  --text-muted: ${dark.textMuted};
+  --accent: ${dark.accent};
+  --accent-soft: ${dark.accentSoft};
+  --border: ${dark.border};
+  --selection-bg: ${dark.selectionBg};
+  --selection-text: ${dark.selectionText};
+  --code-bg: ${dark.codeBg};
+`.trim();
+
+const sharedVars = `
+  --max-width: ${maxWidth};
+  --body-size: ${bodyFontSize};
+  --radius: ${radius};
+  --font-heading: ${FONTS.heading};
+  --font-body: ${FONTS.body};
+  --font-mono: ${FONTS.mono};
+`.trim();
+
+let rootBlock = "";
+if (defaultMode === "auto") {
+  rootBlock = `
+:root { ${sharedVars} ${lightVars} }
+@media (prefers-color-scheme: dark) {
+  :root { ${darkVars} }
+}
+html.dark { ${darkVars} }
+html.light { ${lightVars} }
+`;
+} else if (defaultMode === "dark") {
+  rootBlock = `:root { ${sharedVars} ${darkVars} }`;
+} else {
+  rootBlock = `:root { ${sharedVars} ${lightVars} }`;
+}
+
+const linkRule =
+  linkStyle === "underline"
+    ? "a { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; text-decoration-color: var(--accent-soft); } a:hover { text-decoration-color: var(--accent); }"
+    : linkStyle === "highlight"
+      ? "a { background: var(--accent-soft); padding: 0 2px; border-radius: 3px; text-decoration: none; } a:hover { background: var(--accent); color: var(--selection-text); }"
+      : "a { text-decoration: none; } a:hover { text-decoration: underline; text-underline-offset: 3px; }";
+---
+
+<style is:global set:html={rootBlock + "\n" + linkRule}></style>
+{
+  FONTS.googleFontsUrl && (
+    <>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link rel="stylesheet" href={FONTS.googleFontsUrl} />
+    </>
+  )
+}

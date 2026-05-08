@@ -1,0 +1,31 @@
+---
+import { SITE } from "../consts";
+interface Props {
+  title: string;
+  slug: string;
+}
+const { title, slug } = Astro.props;
+const url = `${SITE.url}/blog/${slug}/`;
+const tweetText = encodeURIComponent(`${title} — by ${SITE.author}`);
+const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(url)}`;
+const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+---
+
+<div class="share">
+  <a href={tweetUrl} target="_blank" rel="noopener">Share on X</a>
+  <a href={linkedinUrl} target="_blank" rel="noopener">LinkedIn</a>
+  <button data-copy={url} type="button">Copy link</button>
+</div>
+
+<script is:inline>
+  document.querySelectorAll(".share button[data-copy]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy);
+        const original = btn.textContent;
+        btn.textContent = "Copied ✓";
+        setTimeout(() => (btn.textContent = original), 1500);
+      } catch {}
+    });
+  });
+</script>
