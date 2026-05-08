@@ -128,31 +128,27 @@ gh repo create akshae-golekar-blog --public --source=. --push
 
 ### 3. Set up the admin panel auth (Decap CMS)
 
-The admin dashboard at `/admin` needs auth so only you can publish. Two free options:
+The admin dashboard at `/admin` needs auth so only you can publish. The OAuth proxy is **already implemented inside this repo** as two Vercel serverless functions ([api/auth.js](api/auth.js) and [api/callback.js](api/callback.js)). You just need to:
 
-**Easiest: GitHub OAuth via a free proxy**
-1. In GitHub: **Settings → Developer settings → OAuth Apps → New OAuth App**
-   - Homepage URL: `https://akshaegolekar.com`
-   - Authorization callback URL: use the proxy below.
-2. Deploy a free OAuth proxy (one-time, takes 5 min):
-   - Fork https://github.com/vencax/netlify-cms-github-oauth-provider
-   - Deploy on Vercel/Render/Fly free tier with env vars:
-     - `OAUTH_CLIENT_ID` = your GitHub OAuth client ID
-     - `OAUTH_CLIENT_SECRET` = your GitHub OAuth secret
-     - `REDIRECT_URL` = `https://<your-proxy>.vercel.app/callback`
-   - Set the callback URL in your GitHub OAuth app to the same.
-3. Update `public/admin/config.yml`:
-   ```yaml
-   backend:
-     name: github
-     repo: <your-username>/akshae-golekar-blog
-     branch: main
-     base_url: https://<your-proxy>.vercel.app
-   ```
+1. **Create a GitHub OAuth App** at https://github.com/settings/developers → "New OAuth App":
+   - Application name: `Akshae blog admin` (anything)
+   - Homepage URL: `https://akshae-golekar-blog.vercel.app` (or your custom domain)
+   - Authorization callback URL: `https://akshae-golekar-blog.vercel.app/api/callback`
+   - Click **Register application** → copy the **Client ID**
+   - Click **Generate a new client secret** → copy the **Client Secret**
 
-**Alternative: Netlify Identity (also free)**
-- Easier to set up, but requires a free Netlify account in addition to Vercel.
-- Keep `backend.name: git-gateway` (current default) and follow https://decapcms.org/docs/git-gateway-backend/.
+2. **Add env vars on Vercel** → your project → Settings → Environment Variables:
+   - `OAUTH_GITHUB_CLIENT_ID` = the Client ID
+   - `OAUTH_GITHUB_CLIENT_SECRET` = the Client Secret
+   - Apply to all environments (Production, Preview, Development).
+
+3. **Redeploy** — push any commit, or click "Redeploy" in the Vercel dashboard.
+
+4. **Open `/admin/`**, click "Login with GitHub", authorize once. Done.
+
+> If you change your domain (e.g. wire up `akshaegolekar.com`), update:
+>   - the OAuth app's homepage + callback URLs on GitHub, AND
+>   - `base_url` and `site_url` in `public/admin/config.yml`.
 
 ### 4. Submit to search engines (5 min, big traffic win)
 - Google Search Console: https://search.google.com/search-console → add `akshaegolekar.com` → submit `https://akshaegolekar.com/sitemap-index.xml`
