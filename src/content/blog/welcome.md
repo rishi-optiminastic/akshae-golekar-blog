@@ -1,26 +1,37 @@
 ---
-title: "Welcome to my blog"
-description: "A short hello, and what to expect here."
-pubDate: 2026-05-08
-tags: ["meta", "hello"]
+title: The Rocket Is Still Rising
+description: A short introduction by Akshae Golekar
+pubDate: 2023-04-03
+updatedDate: 2023-04-03
+heroImage: /uploads/chatgpt-image-jun-2-2026-03_41_17-pm.png
+tags:
+  - akshaegolekar
 draft: false
 ---
+I have always seen my journey as a rocket.
 
-Hi — I'm Akshae, and this is my new blog. I built this in an afternoon with Astro,
-Decap CMS, and Vercel. It costs me nothing, it loads in a blink, and I own every byte.
+Not because it was smooth.
 
-## What you'll find here
+A rocket does not rise gently.
+It shakes. It burns. It fights gravity.
 
-Mostly notes on:
+That is what building something feels like.
 
-- things I'm building
-- things I'm reading
-- the occasional opinion
+Every challenge became turbulence.
+Every risk became fuel.
+Every setback taught me how to aim higher.
 
-## Subscribe
+I was not built by comfort.
+I was built by movement, pressure, discipline, and belief.
 
-There's an [RSS feed](/rss.xml) if you'd like to follow along. I'll also start a small
-email list once I have a handful of posts up.
+From my early hustle to building my own company, one thing has remained constant: I do not want to stay where I am. I want to keep climbing.
 
-Talk soon,
-Akshae
+For me, entrepreneurship is not just about reaching one destination. It is about creating enough thrust to reach the next horizon.
+
+Every campaign, every deal, every venture, every lesson, they are all stages of the same launch.
+
+And now, as digital transformation open new skies, I know this journey is only beginning.
+
+The rocket is still rising.
+
+And I am still looking upward.
