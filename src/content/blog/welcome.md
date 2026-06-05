@@ -1,5 +1,5 @@
 ---
-title: The Rocket Is Still Rising
+title: "The Rocket Is Still Rising "
 description: A short introduction by Akshae Golekar
 pubDate: 2023-04-03
 updatedDate: 2023-04-03
