@@ -16,9 +16,9 @@ backend:
     uploadMedia: "content: upload '{{path}}'"
     deleteMedia: "content: delete '{{path}}'"
 
-# Editorial workflow lets you save drafts and publish later.
-publish_mode: editorial_workflow
-
+# Posts commit straight to `main` on Publish so they go live on the next
+# Vercel build. (The optional `draft` field below still hides a post from the
+# site without needing the editorial-workflow PR queue.)
 media_folder: "public/uploads"
 public_folder: "/uploads"
 

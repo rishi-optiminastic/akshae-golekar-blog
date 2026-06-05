@@ -10,6 +10,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <title>Content Manager</title>
+    <!-- Absolute config path so the CMS loads it correctly whether the URL is
+         /admin#/ or /admin/#/ (otherwise it 404s on a relative config.yml). -->
+    <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
   </head>
   <body>
     <script src="https://unpkg.com/decap-cms@^3.6.0/dist/decap-cms.js" is:inline></script>
