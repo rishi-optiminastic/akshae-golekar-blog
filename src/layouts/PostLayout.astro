@@ -13,7 +13,7 @@ interface Props {
   description: string;
   pubDate: Date;
   updatedDate?: Date;
-  heroImage?: { src: string; width: number; height: number };
+  heroImage?: string;
   tags: string[];
   slug: string;
   rawContent: string;
@@ -22,7 +22,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags, slug, rawCont
 const readingMinutes = FEATURES.readingTime ? estimateReadingTime(rawContent) : 0;
 ---
 
-<BaseLayout {title} {description} article={true} publishedTime={pubDate} image={heroImage?.src}>
+<BaseLayout {title} {description} article={true} publishedTime={pubDate} image={heroImage}>
   <article>
     <h1>{title}</h1>
     <p class="post-meta">
@@ -40,7 +40,7 @@ const readingMinutes = FEATURES.readingTime ? estimateReadingTime(rawContent) : 
         </>
       )}
     </p>
-    {heroImage && <img src={heroImage.src} width={heroImage.width} height={heroImage.height} alt="" />}
+    {heroImage && <img src={heroImage} alt="" />}
     <slot />
     {FEATURES.tags && tags.length > 0 && (
       <p style="margin-top:2.5rem">
