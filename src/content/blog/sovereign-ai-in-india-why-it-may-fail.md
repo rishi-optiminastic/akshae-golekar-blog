@@ -1,7 +1,7 @@
 ---
 title: "Sovereign AI in India: Why It May Fail?"
 description: An unbiased Opinion by Akshae Golekar
-pubDate: 2026-06-26
+pubDate: 2025-06-26
 heroImage: /uploads/chatgpt-image-jun-22-2026-06_19_57-pm.png
 tags: []
 draft: false
