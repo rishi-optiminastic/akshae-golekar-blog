@@ -346,4 +346,11 @@ From India.
 
 For the world.
 
-Build. Build. Build.
+Build. Build. Build.\
+\
+\
+Sources : \
+IndiaAI Mission was approved in March 2024 with an outlay of about ₹10,372 crore to build AI compute, datasets, startup financing, talent, and safe AI capabilities https://www.pib.gov.in/PressReleasePage.aspx?PRID=2178092&lang=2&reg=3\
+India has a large deep-tech startup base, but deep-tech funding is still a fraction of overall venture capital, even though recent reports show it is growing https://www.reuters.com/sustainability/climate-energy/nvidia-joins-india-deep-tech-alliance-group-adds-new-members-850-million-pledge-2025-11-05\
+China’s AI push has been helped by coordinated industrial policy around research, talent, subsidised compute, and applications https://www.rand.org/pubs/perspectives/PEA4012-1.html\
+DeepMind’s AlphaFold is a useful benchmark because it came from years of research before becoming a global scientific breakthrough https://deepmind.google/blog/alphafold-five-years-of-impact
