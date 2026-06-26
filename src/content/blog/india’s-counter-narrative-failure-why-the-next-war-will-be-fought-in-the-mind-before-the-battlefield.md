@@ -493,4 +493,11 @@ The war of the mind is not coming.
 
 It has already begun.
 
-India must be ready.
+India must be ready.\
+\
+\
+Research context I used: India’s PIB has publicly documented fake posts and propaganda around India’s armed forces and Operation Sindoor https://www.pib.gov.in/PressReleasePage.aspx?PRID=2150213 & https://economictimes.indiatimes.com/tech/technology/government-debunks-viral-operation-sindoor-whatsapp-message-as-fake/articleshow/121077076.cms\
+ORF has written about Pakistan’s information warfare against India, including bot-driven campaigns and manipulated visuals https://www.orfonline.org/research/pakistan-s-information-warfare-strategic-implications-and-india-s-response &  \
+Reuters reported that a U.S. commission alleged China ran a campaign to discredit the Rafale after the 2025 India-Pakistan conflict, while noting China denied the allegation https://www.reuters.com/world/china/china-ran-campaign-discredit-french-rafale-fighter-after-india-pakistan-conflict-2025-11-20\
+Meta and Microsoft have repeatedly reported China-linked influence activity and AI-enabled influence operations globally https://about.fb.com/news/2022/09/removing-coordinated-inauthentic-behavior-from-china-and-russia & https://www.microsoft.com/en-ca/security/security-insider/intelligence-reports/digital-threats-from-east-asia-increase-in-breadth-and-effectiveness & https://time.com/6963787/china-influence-operations-artificial-intelligence-cyber-threats-microsoft  \
+Research on bots, fake news, and social manipulation shows that coordinated networks can amplify low-credibility content early, shape perception, and exploit emotion https://arxiv.org/abs/2308.12497 & https://arxiv.org/abs/1707.07592
