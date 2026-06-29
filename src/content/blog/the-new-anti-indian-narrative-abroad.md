@@ -1,6 +1,6 @@
 ---
-title: The New Anti-Indian Narrative Abroad
-description: by Akshae Golekar
+title: How Perception Travels Faster Than Truth
+description: The New Anti-Indian Narrative Abroad by Akshae Golekar
 pubDate: 2025-12-14
 heroImage: /uploads/chatgpt-image-jun-26-2026-02_51_00-pm.png
 tags: []
