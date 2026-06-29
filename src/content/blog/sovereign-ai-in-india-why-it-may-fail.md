@@ -1,6 +1,6 @@
 ---
 title: India’s Search for a Sovereign Mind
-description: An unbiased Opinion by Akshae Golekar
+description: "Sovereign AI in India: Why It May Fail? by Akshae Golekar"
 pubDate: 2025-06-26
 heroImage: /uploads/chatgpt-image-jun-22-2026-06_19_57-pm.png
 tags: []
