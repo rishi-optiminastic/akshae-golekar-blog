@@ -2,6 +2,7 @@
 title: The Art of Being Chosen
 description: AEO Is Not AI Visibility. It Is the Fight for Appearance by Akshae Golekar
 pubDate: 2026-02-28
+heroImage: /uploads/chatgpt-image-jun-29-2026-12_38_18-pm.png
 tags: []
 draft: false
 ---
