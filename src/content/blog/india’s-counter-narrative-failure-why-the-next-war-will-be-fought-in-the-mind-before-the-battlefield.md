@@ -1,7 +1,7 @@
 ---
-title: "India’s Counter-Narrative Failure: Why the Next War Will Be Fought in
-  the Mind Before the Battlefield"
-description: A Operation Sindoor Counter-Narrative Opinion by Akshae Golekar
+title: The Battlefield of Perception
+description: "India’s Counter-Narrative Failure: Why the Next War Will Be Fought
+  in the Mind Before the Battlefield by Akshae Golekar"
 pubDate: 2025-07-20
 heroImage: /uploads/chatgpt-image-jun-26-2026-01_26_36-pm.png
 tags: []
