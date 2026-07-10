@@ -37,9 +37,9 @@ export const NAV = [
 // SOCIAL — links shown in the footer (leave a value blank to hide that icon)
 // -----------------------------------------------------------------------------
 export const SOCIAL = {
-  twitter: "https://twitter.com/akshaegolekar",
+  twitter: "https://x.com/akshae_golekar",
   github: "",
-  linkedin: "https://www.linkedin.com/in/akshaegolekar", // TODO: set your real LinkedIn URL
+  linkedin: "https://uk.linkedin.com/in/akshae-golekar", // TODO: set your real LinkedIn URL
   instagram: "",
   youtube: "",
   mastodon: "",
