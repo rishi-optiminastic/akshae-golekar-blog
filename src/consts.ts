@@ -39,11 +39,22 @@ export const NAV = [
 export const SOCIAL = {
   twitter: "https://twitter.com/akshaegolekar",
   github: "",
-  linkedin: "",
+  linkedin: "https://www.linkedin.com/in/akshaegolekar", // TODO: set your real LinkedIn URL
   instagram: "",
   youtube: "",
   mastodon: "",
-  email: "hi@akshaegolekar.com",
+  email: "", // hidden from the footer; visitors use the contact form instead
+};
+
+// -----------------------------------------------------------------------------
+// CONTACT — contact form shown on the About page
+// -----------------------------------------------------------------------------
+// The form posts to the /api/contact serverless function, which emails the
+// message to you over SMTP. Configure the SMTP credentials as env vars on
+// Vercel (see api/contact.js for the full list).
+// -----------------------------------------------------------------------------
+export const CONTACT = {
+  action: "/api/contact",
 };
 
 // -----------------------------------------------------------------------------

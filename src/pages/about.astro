@@ -1,16 +1,256 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { SITE } from "../consts";
+import { SITE, CONTACT } from "../consts";
 ---
 
 <BaseLayout title="About" description={`A little about ${SITE.author}.`}>
   <h1>About</h1>
   <p>
-    Hi — I'm {SITE.author}. This is where I write down what I'm thinking about. Replace
+    Hi, I'm {SITE.author}. This is where I write down what I'm thinking about. Replace
     this page with your own bio in <code>src/pages/about.astro</code>, or edit it from
     <a href="/admin/">the admin panel</a>.
   </p>
-  <p>
-    You can reach me at <a href={`mailto:${SITE.authorEmail}`}>{SITE.authorEmail}</a>.
-  </p>
+
+  <h2>Get in touch</h2>
+  <p>Have a question or want to work together? Send me a message.</p>
+
+  <form class="contact-form" action={CONTACT.action} method="POST" novalidate>
+    <!-- Honeypot: hidden from people, tempting to bots. Leave it empty. -->
+    <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" hidden />
+
+    <label>
+      <span>Name</span>
+      <input type="text" name="name" autocomplete="name" required />
+      <small class="field-error" data-error-for="name"></small>
+    </label>
+
+    <label>
+      <span>Phone number</span>
+      <input type="tel" name="phone" autocomplete="tel" required />
+      <small class="field-error" data-error-for="phone"></small>
+    </label>
+
+    <label>
+      <span>Email address</span>
+      <input type="email" name="email" autocomplete="email" required />
+      <small class="field-error" data-error-for="email"></small>
+    </label>
+
+    <label>
+      <span>Message</span>
+      <textarea name="message" rows="5" required></textarea>
+      <small class="field-error" data-error-for="message"></small>
+    </label>
+
+    <button type="submit">Send message</button>
+    <p class="form-status" role="status" aria-live="polite"></p>
+  </form>
 </BaseLayout>
+
+<script>
+  // Once-per-24h limit (client-side UX guard only; the server validates too).
+  const RATE_LIMIT_MS = 24 * 60 * 60 * 1000;
+  const STORAGE_KEY = "contact-form-last-sent";
+
+  const form = document.querySelector<HTMLFormElement>(".contact-form");
+  if (form) {
+    const status = form.querySelector<HTMLParagraphElement>(".form-status")!;
+    const button = form.querySelector<HTMLButtonElement>("button[type='submit']")!;
+
+    // Idempotency key for the current submission. The same key is reused across
+    // retries so a resend never produces a duplicate email; a new key is minted
+    // only after a successful send.
+    const newKey = () =>
+      typeof crypto !== "undefined" && crypto.randomUUID
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    let idempotencyKey = newKey();
+
+    const setStatus = (message: string, kind: "error" | "success" | "") => {
+      status.textContent = message;
+      status.dataset.kind = kind;
+    };
+
+    const setFieldError = (field: string, message: string) => {
+      const el = form.querySelector(`[data-error-for="${field}"]`);
+      if (el) el.textContent = message;
+    };
+
+    const clearErrors = () => {
+      form.querySelectorAll(".field-error").forEach((el) => (el.textContent = ""));
+      setStatus("", "");
+    };
+
+    const lastSentAt = (): number => {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const value = raw ? Number(raw) : 0;
+      return Number.isFinite(value) ? value : 0;
+    };
+
+    const hoursUntilAllowed = (): number => {
+      const elapsed = Date.now() - lastSentAt();
+      if (elapsed >= RATE_LIMIT_MS) return 0;
+      return Math.ceil((RATE_LIMIT_MS - elapsed) / (60 * 60 * 1000));
+    };
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phonePattern = /^[+()\d][\d\s()-]{6,}$/;
+
+    const validate = (data: Record<string, string>): boolean => {
+      clearErrors();
+      let ok = true;
+
+      if (data.name.length < 2) {
+        setFieldError("name", "Please enter your name.");
+        ok = false;
+      }
+      if (!phonePattern.test(data.phone)) {
+        setFieldError("phone", "Please enter a valid phone number.");
+        ok = false;
+      }
+      if (!emailPattern.test(data.email)) {
+        setFieldError("email", "Please enter a valid email address.");
+        ok = false;
+      }
+      if (data.message.length < 10) {
+        setFieldError("message", "Your message is a little short.");
+        ok = false;
+      }
+      return ok;
+    };
+
+    // Reflect the limit on load so the button state matches reality.
+    if (hoursUntilAllowed() > 0) {
+      button.disabled = true;
+      setStatus(`You've already sent a message. Please try again in about ${hoursUntilAllowed()} hour(s).`, "error");
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const remaining = hoursUntilAllowed();
+      if (remaining > 0) {
+        setStatus(`You've already sent a message. Please try again in about ${remaining} hour(s).`, "error");
+        return;
+      }
+
+      const formData = new FormData(form);
+      const data = {
+        name: String(formData.get("name") || "").trim(),
+        phone: String(formData.get("phone") || "").trim(),
+        email: String(formData.get("email") || "").trim(),
+        message: String(formData.get("message") || "").trim(),
+        _gotcha: String(formData.get("_gotcha") || ""),
+      };
+
+      if (!validate(data)) return;
+
+      button.disabled = true;
+      setStatus("Sending...", "");
+
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Idempotency-Key": idempotencyKey,
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({}));
+          setStatus(body.error || "Something went wrong. Please try again later.", "error");
+          button.disabled = false;
+          return;
+        }
+
+        localStorage.setItem(STORAGE_KEY, String(Date.now()));
+        idempotencyKey = newKey(); // fresh key for any future submission
+        form.reset();
+        setStatus("Thanks! Your message has been sent.", "success");
+      } catch {
+        setStatus("Network error. Please check your connection and try again.", "error");
+        button.disabled = false;
+      }
+    });
+  }
+</script>
+
+<style>
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    margin-top: 1.5rem;
+  }
+
+  .contact-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-weight: 500;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    padding: 0.65rem 0.8rem;
+    font: inherit;
+    color: var(--text);
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .contact-form textarea {
+    resize: vertical;
+  }
+
+  .contact-form input:focus,
+  .contact-form textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  .contact-form button {
+    align-self: flex-start;
+    padding: 0.65rem 1.4rem;
+    font: inherit;
+    font-weight: 600;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+  }
+
+  .contact-form button:hover {
+    opacity: 0.9;
+  }
+
+  .contact-form button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .field-error {
+    color: #dc2626;
+    font-weight: 400;
+    min-height: 1em;
+  }
+
+  .form-status {
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .form-status[data-kind="error"] {
+    color: #dc2626;
+  }
+
+  .form-status[data-kind="success"] {
+    color: var(--accent);
+  }
+</style>
