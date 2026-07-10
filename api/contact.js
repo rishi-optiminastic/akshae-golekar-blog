@@ -15,6 +15,7 @@ import nodemailer from "nodemailer";
 
 const DEFAULT_TO = "akshae@optiminastic.com";
 const MAX_FIELD_LENGTH = 5000;
+const SITE_NAME = process.env.CONTACT_SITE_NAME || "Akshae Golekar";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_PATTERN = /^[+()\d][\d\s()-]{6,}$/;
@@ -59,6 +60,16 @@ async function readFields(req) {
 
 function clean(value) {
   return String(value ?? "").trim().slice(0, MAX_FIELD_LENGTH);
+}
+
+// Escape user input before placing it in the HTML email body.
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function sendJson(res, status, payload) {
@@ -119,21 +130,54 @@ export default async function handler(req, res) {
   });
 
   const to = process.env.CONTACT_TO || DEFAULT_TO;
-  const from = process.env.CONTACT_FROM || SMTP_USER;
+  const fromAddress = process.env.CONTACT_FROM || SMTP_USER;
+
+  const text = [
+    `New contact enquiry from the ${SITE_NAME} website`,
+    "",
+    `Name:  ${name}`,
+    `Phone: ${phone}`,
+    `Email: ${email}`,
+    "",
+    "Message:",
+    message,
+  ].join("\n");
+
+  const html = `
+    <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#16161a;max-width:560px">
+      <h2 style="margin:0 0 4px">New contact enquiry</h2>
+      <p style="margin:0 0 20px;color:#5a5a66">Sent from the ${escapeHtml(SITE_NAME)} website</p>
+      <table style="border-collapse:collapse;width:100%;margin-bottom:20px">
+        <tr>
+          <td style="padding:8px 12px;background:#f4f4ee;font-weight:600;width:96px">Name</td>
+          <td style="padding:8px 12px;border-bottom:1px solid #e6e6e0">${escapeHtml(name)}</td>
+        </tr>
+        <tr>
+          <td style="padding:8px 12px;background:#f4f4ee;font-weight:600">Phone</td>
+          <td style="padding:8px 12px;border-bottom:1px solid #e6e6e0">
+            <a href="tel:${escapeHtml(phone)}" style="color:#c2410c">${escapeHtml(phone)}</a>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:8px 12px;background:#f4f4ee;font-weight:600">Email</td>
+          <td style="padding:8px 12px;border-bottom:1px solid #e6e6e0">
+            <a href="mailto:${escapeHtml(email)}" style="color:#c2410c">${escapeHtml(email)}</a>
+          </td>
+        </tr>
+      </table>
+      <p style="margin:0 0 6px;font-weight:600">Message</p>
+      <p style="margin:0;white-space:pre-wrap;line-height:1.5">${escapeHtml(message)}</p>
+    </div>`;
 
   try {
     await transporter.sendMail({
-      from,
+      // Display name surfaces who wrote in; address stays the authenticated sender.
+      from: { name: `${name} via ${SITE_NAME}`, address: fromAddress },
       to,
-      replyTo: email,
-      subject: `New contact form message from ${name}`,
-      text: [
-        `Name:  ${name}`,
-        `Phone: ${phone}`,
-        `Email: ${email}`,
-        "",
-        message,
-      ].join("\n"),
+      replyTo: { name, address: email },
+      subject: `New enquiry from ${name} - ${SITE_NAME} website`,
+      text,
+      html,
     });
   } catch (err) {
     // Release the key so the visitor can retry the same submission.
