@@ -8,12 +8,14 @@
 //   SMTP_PASS            SMTP password / app password
 // Optional env vars:
 //   SMTP_SECURE          "true" to use SSL (set this when SMTP_PORT=465)
-//   CONTACT_TO           recipient (default: akshae@optiminastic.com)
+//   CONTACT_TO           recipient(s), comma-separated (default: akshae@optiminastic.com, admin@seed.screenstudio.invalid)
+//   CONTACT_CC           CC recipient(s), comma-separated (default: foundersoffice@optiminastic.com)
 //   CONTACT_FROM         From address (default: SMTP_USER)
 
 import nodemailer from "nodemailer";
 
-const DEFAULT_TO = "akshae@optiminastic.com";
+const DEFAULT_TO = "akshae@optiminastic.com, admin@seed.screenstudio.invalid";
+const DEFAULT_CC = "foundersoffice@optiminastic.com";
 const MAX_FIELD_LENGTH = 5000;
 const SITE_NAME = process.env.CONTACT_SITE_NAME || "Akshae Golekar";
 
@@ -130,6 +132,7 @@ export default async function handler(req, res) {
   });
 
   const to = process.env.CONTACT_TO || DEFAULT_TO;
+  const cc = process.env.CONTACT_CC || DEFAULT_CC;
   const fromAddress = process.env.CONTACT_FROM || SMTP_USER;
 
   const text = [
@@ -174,6 +177,7 @@ export default async function handler(req, res) {
       // Display name surfaces who wrote in; address stays the authenticated sender.
       from: { name: `${name} via ${SITE_NAME}`, address: fromAddress },
       to,
+      cc,
       replyTo: { name, address: email },
       subject: `New enquiry from ${name} - ${SITE_NAME} website`,
       text,
