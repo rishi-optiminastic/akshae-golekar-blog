@@ -1,9 +1,21 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { SITE, CONTACT } from "../consts";
+
+const profile = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  url: new URL("/about/", SITE.url).href,
+  mainEntity: {
+    "@type": "Person",
+    name: SITE.author,
+    url: SITE.url,
+  },
+};
 ---
 
 <BaseLayout title="About" description={`Meet ${SITE.author}, co-founder of Optiminastic Media, and explore his writing on ideas and work.`}>
+  <script type="application/ld+json" set:html={JSON.stringify(profile).replace(/</g, "\\u003c")} />
   <h1>About</h1>
   <p>
     Hi, I'm {SITE.author}, co-founder of Optiminastic Media. I write about ideas and work on this site.
