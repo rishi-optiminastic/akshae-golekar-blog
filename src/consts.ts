@@ -20,7 +20,7 @@ export const SITE = {
   // Drop the file in `public/` and set the path here. Leave empty to hide.
   logo: "", // e.g. "/avatar.png"
   // Default Open Graph image (1200×630). Drop in public/ and reference here.
-  defaultOgImage: "/og-default.png",
+  defaultOgImage: "",
 };
 
 // -----------------------------------------------------------------------------
