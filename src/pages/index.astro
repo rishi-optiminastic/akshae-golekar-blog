@@ -10,7 +10,7 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft))
   .slice(0, 5);
 ---
 
-<BaseLayout title={SITE.title} description={SITE.description}>
+<BaseLayout title="Personal Blog" description={`Read ${SITE.author}’s personal blog for essays on ideas, work, and life.`}>
   <section>
     <h1>Hi, I'm {SITE.author.split(" ")[0]} 👋</h1>
     <p>
